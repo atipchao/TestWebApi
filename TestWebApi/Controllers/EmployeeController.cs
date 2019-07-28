@@ -20,15 +20,25 @@ namespace TestWebApi.Controllers
                 return (_db.Employees.ToList());
             
         }
-        public Employee Get(int Id)
+        //public Employee Get(int Id)
+        public HttpResponseMessage Get(int Id)
         {
-            return (_db.Employees.Where(s => s.ID == Id).FirstOrDefault());
+            //            return (_db.Employees.Where(s => s.ID == Id).FirstOrDefault());
+            var ret = _db.Employees.Where(s => s.ID == Id).FirstOrDefault();
+            if (ret != null)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, ret); // return 200
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Emp Not found for ID: " + Id.ToString()); // return 404  
+            }
         }
 
-        //public void Post([FromBody] Employee employee)
+        //public void Post([FromBody] Employee employee) NOTE, when return type is VOID, return default 204 - no content 
         public HttpResponseMessage Post([FromBody] Employee employee)
         {
-            // For POST success, we should return 201 and along with the URI of the newly created Item!
+            // For POST success (created a new item),  we should return 201 and along with the URI of the newly created Item!
             try
             {
                 _db.Employees.Add(employee);
@@ -41,7 +51,7 @@ namespace TestWebApi.Controllers
             }
             catch(Exception e)
             {
-                var err =   Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+                var err =   Request.CreateErrorResponse(HttpStatusCode.BadRequest, e); // Return error with Info
                 return err;
             }
         }
