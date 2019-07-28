@@ -24,5 +24,26 @@ namespace TestWebApi.Controllers
         {
             return (_db.Employees.Where(s => s.ID == Id).FirstOrDefault());
         }
+
+        //public void Post([FromBody] Employee employee)
+        public HttpResponseMessage Post([FromBody] Employee employee)
+        {
+            // For POST success, we should return 201 and along with the URI of the newly created Item!
+            try
+            {
+                _db.Employees.Add(employee);
+                _db.SaveChanges();
+
+                var msg = Request.CreateResponse(HttpStatusCode.Created, employee);
+                // Also return Header Location
+                msg.Headers.Location = new Uri(Request.RequestUri + employee.ID.ToString());
+                return msg;
+            }
+            catch(Exception e)
+            {
+                var err =   Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+                return err;
+            }
+        }
     }
 }
