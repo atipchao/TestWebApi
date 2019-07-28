@@ -55,5 +55,27 @@ namespace TestWebApi.Controllers
                 return err;
             }
         }
+
+        //public void Delete(int id)// this one return 204 No-Content, properly we should return 200 Okay
+        // When Item to be deleted is not found, we should return 404 Not found
+        public HttpResponseMessage Delete(int id)
+        {
+            
+            try
+            {
+                var targetRec = _db.Employees.FirstOrDefault(e => e.ID == id);
+                if (targetRec == null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Not found Emp with ID: " + id);
+                }
+                _db.Employees.Remove(targetRec);
+                _db.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
     }
 }
