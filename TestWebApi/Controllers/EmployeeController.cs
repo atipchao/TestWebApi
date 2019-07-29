@@ -14,14 +14,18 @@ namespace TestWebApi.Controllers
     {
         EmployeeDBEntities _db = new EmployeeDBEntities();
 
-        public IEnumerable<Employee> Get()
+        [HttpGet]
+        //public IEnumerable<Employee> GetSomething()
+        public IEnumerable<Employee> LoadAllEmp()  // Error: "message": "The requested resource does not support http method 'GET'."
         {
-            
-                return (_db.Employees.ToList());
+
+            return (_db.Employees.ToList());
             
         }
+        [HttpGet]
         //public Employee Get(int Id)
-        public HttpResponseMessage Get(int Id)
+        //public HttpResponseMessage Get(int Id)
+        public HttpResponseMessage LoadEmpById(int Id)
         {
             //            return (_db.Employees.Where(s => s.ID == Id).FirstOrDefault());
             var ret = _db.Employees.Where(s => s.ID == Id).FirstOrDefault();
