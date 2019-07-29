@@ -77,5 +77,38 @@ namespace TestWebApi.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
             }
         }
+
+
+        //public void Put(int id, [FromBody] Employee employee)
+        public HttpResponseMessage Put(int id, [FromBody] Employee employee)
+        {
+            try
+            {
+                // First locate the Target Emp
+                var targetEmp = _db.Employees.FirstOrDefault(e => e.ID == id);
+                if(targetEmp != null)
+                {
+                    targetEmp.FirstName = employee.FirstName;
+                    targetEmp.LastName = employee.LastName;
+                    targetEmp.Gender = employee.Gender;
+                    targetEmp.Salary = employee.Salary;
+                    _db.SaveChanges();
+                    var msg = Request.CreateResponse(HttpStatusCode.Created, employee);
+                    // Also return Header Location
+                    msg.Headers.Location = new Uri(Request.RequestUri + employee.ID.ToString());
+                    return msg;
+
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Not found Emp with ID: " + id);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
+            
+        }
     }
 }
