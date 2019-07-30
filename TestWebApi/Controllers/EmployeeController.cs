@@ -16,10 +16,23 @@ namespace TestWebApi.Controllers
 
         [HttpGet]
         //public IEnumerable<Employee> GetSomething()
-        public IEnumerable<Employee> LoadAllEmp()  // Error: "message": "The requested resource does not support http method 'GET'."
+        //public IEnumerable<Employee> LoadAllEmp()  // Error: "message": "The requested resource does not support http method 'GET'."
+        public HttpResponseMessage Get(string gender = "All") 
         {
 
-            return (_db.Employees.ToList());
+            //return (_db.Employees.ToList());
+            switch (gender.ToLower())
+            {
+                case "all":
+                    return Request.CreateResponse(HttpStatusCode.OK, _db.Employees.ToList());
+                case "male":
+                    return Request.CreateResponse(HttpStatusCode.OK, _db.Employees.Where(e => e.Gender.ToLower() == "male").ToList());
+                case "female":
+                    return Request.CreateResponse(HttpStatusCode.OK, _db.Employees.Where(e => e.Gender.ToLower() == "female").ToList());
+                default:
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Value for Gender Not found : " + gender.ToLower());
+
+            }
             
         }
         [HttpGet]
