@@ -10,11 +10,11 @@
             $("#btn").click(function () {
                 $.ajax({
                     type: 'GET',
-                    url: 'api/Employee',
+                    url: 'http://localhost:53126/api/employee', 
                     dataType: 'json',
                     success: function (data) {
                         ulEmployees.empty();
-                        $.each(data, function (index, val) { 
+                        $.each(data, function (index, val) {
                             console.log(val);
                             var fullName = val.firstName + ' ' + val.lastName;
                             ulEmployees.append('<li>' + fullName + '</li>')
@@ -34,8 +34,6 @@
 <body>
     <input id="btn" type="button" value="Get all employees" />
     <input id="btnClear" type="button" value="Clear" />
-    <ul id="ulEmployee">
-
-    </ul>
- </body>
+    <ul id="ulEmployee"></ul>
+</body>
 </html>
