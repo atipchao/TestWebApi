@@ -97,6 +97,9 @@ namespace TestWebApi.Controllers
 
 
         //public void Put(int id, [FromBody] Employee employee)
+        //By default for simple parm, WEBAPI try to get the Parameter data from the URI
+        //For complex parms, we pass it via [FormBody] 
+        //public HttpResponseMessage Put(int id, [FromUri] Employee employee)  ==> you can also force it over the URI
         public HttpResponseMessage Put(int id, [FromBody] Employee employee)
         {
             try
