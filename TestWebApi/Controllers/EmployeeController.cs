@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Web.Http;
 
 using EmpDB;
@@ -12,16 +13,21 @@ namespace TestWebApi.Controllers
     // use api
     public class EmployeeController : ApiController
     {
+        
         EmployeeDBEntities _db = new EmployeeDBEntities();
 
         [HttpGet]
         //public IEnumerable<Employee> GetSomething()
         //public IEnumerable<Employee> LoadAllEmp()  // Error: "message": "The requested resource does not support http method 'GET'."
+        [BasicAuthentication]
         public HttpResponseMessage Get(string gender = "All") 
         {
 
+            string username = Thread.CurrentPrincipal.Identity.Name;
+
             //return (_db.Employees.ToList());
-            switch (gender.ToLower())
+            //switch (gender.ToLower())
+            switch (username.ToLower())
             {
                 case "all":
                     return Request.CreateResponse(HttpStatusCode.OK, _db.Employees.ToList());
