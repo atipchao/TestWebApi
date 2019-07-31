@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 using WebApiContrib.Formatting.Jsonp;
@@ -34,7 +35,8 @@ namespace TestWebApi
             //Apply jsonp format
             //var jsonpFormatter = new JsonpMediaTypeFormatter(config.Formatters.JsonFormatter);
             //config.Formatters.Insert(0, jsonpFormatter);
-
+            EnableCorsAttribute cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);
         }
     }
 }
