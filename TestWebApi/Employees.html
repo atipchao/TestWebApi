@@ -5,20 +5,31 @@
     <script src="Scripts/jquery-3.3.1.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-
+            var username = 'female';
+            var password = 'female';
             var ulEmployees = $("#ulEmployee");
             $("#btn").click(function () {
                 $.ajax({
                     type: 'GET',
                     url: 'api/Employee',
                     dataType: 'json',
+                    headers:{
+                        'Authorization': 'Basic ' + btoa(username + ':' + password)
+                    },
                     success: function (data) {
                         ulEmployees.empty();
                         $.each(data, function (index, val) { 
                             console.log(val);
                             var fullName = val.firstName + ' ' + val.lastName;
-                            ulEmployees.append('<li>' + fullName + '</li>')
+                            ulEmployees.append('<li>' + fullName + ' ' + val.Gender + '</li>')
                         });
+                    },
+                    complete: function (jqXHR) {
+                        if (jqXHR.status == '401') {
+                            ulEmployees.empty();
+                            ulEmployees.append('<li>' + jqXHR.status + ' : ' + jqXHR.statusText + '</li>');
+                        }
+                        //ulEmployees.append('<li>' + jqXHR.status + ' : ' + jqXHR.statusText + '</li>');
                     }
                 });
             });
